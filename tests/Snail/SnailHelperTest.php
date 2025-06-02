@@ -26,8 +26,7 @@ class SnailHelperTest extends TestCase
 	 */
 	public function testIsValid (string $input) : void
 	{
-		$helper = new SnailHelper();
-		self::assertTrue($helper->isValidSnail($input));
+		self::assertTrue(SnailHelper::isValidSnail($input));
 	}
 
 	/**
@@ -52,8 +51,7 @@ class SnailHelperTest extends TestCase
 	 */
 	public function testIsInvalid (string $input) : void
 	{
-		$helper = new SnailHelper();
-		self::assertFalse($helper->isValidSnail($input));
+		self::assertFalse(SnailHelper::isValidSnail($input));
 	}
 
 
