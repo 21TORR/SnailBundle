@@ -1,0 +1,67 @@
+{
+	"name": "21torr/snail",
+	"description": "Helpers for using snails (slugs with special format)",
+	"license": "MIT",
+	"type": "symfony-bundle",
+	"authors": [
+		{
+			"name": "21TORR",
+			"homepage": "https://www.21torr.com/"
+		}
+	],
+	"homepage": "https://github.com/21TORR/SnailBundle",
+	"require": {
+		"php": ">= 8.4",
+		"ext-intl": "*",
+		"21torr/bundle-helpers": "^2.3",
+		"symfony/dependency-injection": "^7.3",
+		"symfony/http-kernel": "^7.3",
+		"symfony/string": "^7.3"
+	},
+	"require-dev": {
+		"21torr/janus": "^1.4.0",
+		"bamarni/composer-bin-plugin": "^1.8",
+		"roave/security-advisories": "dev-latest",
+		"symfony/phpunit-bridge": "^7.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Torr\\Snail\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\Torr\\Snail\\": "tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		},
+		"sort-packages": true
+	},
+	"extra": {
+		"bamarni-bin": {
+			"bin-links": false,
+			"forward-command": true
+		},
+		"branch-alias": {
+			"1.x-dev": "1.99.x-dev",
+			"dev-next": "1.99.x-dev"
+		}
+	},
+	"scripts": {
+		"fix-lint": [
+			"@composer bin c-norm normalize \"$(pwd)/composer.json\" --indent-style tab --indent-size 1 --ansi",
+			"vendor-bin/cs-fixer/vendor/bin/php-cs-fixer fix --diff --config vendor-bin/cs-fixer/vendor/21torr/php-cs-fixer/.php-cs-fixer.dist.php --no-interaction --ansi"
+		],
+		"lint": [
+			"@composer bin c-norm normalize \"$(pwd)/composer.json\" --indent-style tab --indent-size 1 --dry-run --ansi",
+			"vendor-bin/cs-fixer/vendor/bin/php-cs-fixer check --diff --config vendor-bin/cs-fixer/vendor/21torr/php-cs-fixer/.php-cs-fixer.dist.php --no-interaction --ansi"
+		],
+		"test": [
+			"simple-phpunit",
+			"vendor-bin/phpstan/vendor/bin/phpstan analyze -c phpstan.neon . --ansi -v"
+		]
+	}
+}
