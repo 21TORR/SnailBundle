@@ -3,14 +3,16 @@
 namespace Torr\Snail\Snail;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\UnicodeString;
 use Torr\Snail\Exception\SnailGenerationFailedException;
+
 use function Symfony\Component\String\u;
 
 /**
+ * Main class that helps generating and validation snails
+ *
  * @final
  */
-class SnailHelper
+class Snailer
 {
 	private const LOCALE_TO_TRANSLITERATOR_ID = [
 		'am' => 'Amharic-Latin',
@@ -45,7 +47,7 @@ class SnailHelper
 	/**
 	 * Cache of transliterators per locale.
 	 *
-	 * @var \Transliterator[]
+	 * @var array<array-key, \Transliterator|null>
 	 */
 	private array $transliterators = [];
 
@@ -69,6 +71,7 @@ class SnailHelper
 			: $string->lower();
 
 		$transliterator = [];
+
 		if ($locale && ('de' === $locale || str_starts_with($locale, 'de_')))
 		{
 			// Use the shortcut for German in UnicodeString::ascii() if possible (faster and no requirement on intl)
@@ -89,7 +92,7 @@ class SnailHelper
 		if ("" === $transformed)
 		{
 			throw new SnailGenerationFailedException(
-				sprintf(
+				\sprintf(
 					"Could not generate snail from text '%s', as the result would be empty.",
 					$text,
 				),
@@ -114,8 +117,8 @@ class SnailHelper
 		// Exact locale supported, cache and return
 		if ($id = self::LOCALE_TO_TRANSLITERATOR_ID[$locale] ?? null)
 		{
-			return $this->transliterators[$locale] =
-				\Transliterator::create($id . '/BGN') ?? \Transliterator::create($id);
+			return $this->transliterators[$locale]
+				= \Transliterator::create($id . '/BGN') ?? \Transliterator::create($id);
 		}
 
 		// Locale is not supported and there is no parent, fallback to any-latin

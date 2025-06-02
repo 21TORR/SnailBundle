@@ -2,17 +2,20 @@
 
 namespace Tests\Torr\Snail\Snail;
 
-use Torr\Snail\Exception\SnailGenerationFailedException;
-use Torr\Snail\Snail\SnailHelper;
 use PHPUnit\Framework\TestCase;
+use Torr\Snail\Exception\SnailGenerationFailedException;
+use Torr\Snail\Snail\Snailer;
 
-class SnailHelperTest extends TestCase
+/**
+ * @internal
+ */
+final class SnailerTest extends TestCase
 {
 	/**
 	 *
 	 */
 	public static function provideIsValid () : iterable
- 	{
+	{
 		yield "plain" => ["test"];
 		yield "with dash" => ["a-b"];
 		yield "with underscore" => ["a-b_c"];
@@ -26,14 +29,14 @@ class SnailHelperTest extends TestCase
 	 */
 	public function testIsValid (string $input) : void
 	{
-		self::assertTrue(SnailHelper::isValidSnail($input));
+		self::assertTrue(Snailer::isValidSnail($input));
 	}
 
 	/**
 	 *
 	 */
 	public static function provideIsInvalid () : iterable
- 	{
+	{
 		yield "empty" => [""];
 		yield "dash at the end" => ["test-"];
 		yield "dot at the end" => ["test."];
@@ -51,10 +54,8 @@ class SnailHelperTest extends TestCase
 	 */
 	public function testIsInvalid (string $input) : void
 	{
-		self::assertFalse(SnailHelper::isValidSnail($input));
+		self::assertFalse(Snailer::isValidSnail($input));
 	}
-
-
 
 	/**
 	 *
@@ -65,13 +66,12 @@ class SnailHelperTest extends TestCase
 		yield "umlauts" => ["äöü", "aou"];
 	}
 
-
 	/**
 	 * @dataProvider provideGenerateValid
 	 */
 	public function testGenerateValid (string $input, string $expected) : void
 	{
-		$helper = new SnailHelper();
+		$helper = new Snailer();
 
 		self::assertSame(
 			$expected,
@@ -88,19 +88,18 @@ class SnailHelperTest extends TestCase
 		yield "invalid-chars" => ["@"];
 	}
 
-
 	/**
 	 * @dataProvider provideGenerateInvalid
 	 */
 	public function testGenerateInvalid (string $input) : void
 	{
 		$this->expectException(SnailGenerationFailedException::class);
-		$this->expectExceptionMessage(sprintf(
+		$this->expectExceptionMessage(\sprintf(
 			"Could not generate snail from text '%s', as the result would be empty.",
 			$input,
 		));
 
-		$helper = new SnailHelper();
+		$helper = new Snailer();
 		$helper->generateSnail($input);
 	}
 }
