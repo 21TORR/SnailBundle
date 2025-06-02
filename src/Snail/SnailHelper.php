@@ -52,7 +52,7 @@ class SnailHelper
 	/**
 	 *
 	 */
-	public function isValidSnail (string $snail) : bool
+	public static function isValidSnail (string $snail) : bool
 	{
 		return 0 !== preg_match('~^[a-z0-9]+([.\\-_][a-z0-9]+)*$~', $snail);
 	}
