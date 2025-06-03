@@ -85,7 +85,7 @@ class Snailer
 		$transformed = $string
 			->ascii($transliterator)
 			->replaceMatches('~[^a-z0-9._-]+~', '-')
-			->replaceMatches('~--+~', '-')
+			->replaceMatches('~([._-])[._-]+~', '$1')
 			->trim("._-")
 			->toString();
 

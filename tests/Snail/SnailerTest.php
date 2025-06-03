@@ -47,6 +47,7 @@ final class SnailerTest extends TestCase
 		yield "double dash" => ["a--b"];
 		yield "special characters" => ["a@b"];
 		yield "upper case characters" => ["aBc"];
+		yield "special characters list" => ["a-._b"];
 	}
 
 	/**
@@ -63,7 +64,9 @@ final class SnailerTest extends TestCase
 	public static function provideGenerateValid () : iterable
 	{
 		yield "uppercase" => ["UPPERCASE-lower", "uppercase-lower"];
+		yield "trailing and leading special characters" => ["-test-", "test"];
 		yield "umlauts" => ["äöü", "aou"];
+		yield "collapse special characters list to first" => ["a-._b", "a-b"];
 	}
 
 	/**
